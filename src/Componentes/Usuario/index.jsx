@@ -81,12 +81,16 @@ setImagenes(imagenes.filter((img) => img.id !== id));
 }
 };
 
-//cerrar sesion
 const handleLogout = async () => {
-await supabase.auth.signOut()
-setUser(null)
-setTareas([])
-}
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error("Error al cerrar sesión:", error.message);
+    alert("Hubo un problema al cerrar sesión");
+  } else {
+    // Redirigir o recargar la página después del logout
+    window.location.href = "/"; // Cambia "/" por tu ruta deseada
+  }
+};
 
 if (!usuario) return <p>Cargando...</p>;
 
@@ -139,7 +143,20 @@ handleEliminarImagen(img.id)}>Eliminar</button>
 </ul>
 <hr />
 <h2>Quiero cerrar sesión</h2>
-<button onClick={handleLogout}>Cerrar sesión</button>
+<button 
+  onClick={handleLogout} 
+  style={{
+    backgroundColor: "red",
+    color: "white",
+    padding: "10px",
+    fontSize: "16px",
+    position: "relative",
+    zIndex: 1000,
+    marginTop: "40px"
+  }}
+>
+  Cerrar sesión
+</button>
 {/* saltos de linea para que el menu no tape el boton */}
 <br /><br /><br /><br /><br />
 </div>
